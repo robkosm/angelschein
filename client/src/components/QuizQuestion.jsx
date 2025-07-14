@@ -79,7 +79,7 @@ function QuizQuestion({ question, onSubmit, onNext }) {
           </div>
         </div>
         <div className="flex items-center space-x-2 text-sm text-gray-500">
-          <span>Level {questionData.level}</span>
+          <span>Level {question.level}</span>
           <span>•</span>
           <span>{question.total_attempts} Versuche</span>
         </div>

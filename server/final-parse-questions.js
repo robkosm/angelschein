@@ -122,10 +122,10 @@ class FinalQuestionParser {
 
     return {
       id: questionId,
-      question: questionText,
-      category: category,
-      subject: subject, // Save the roman numeral
-      answers: answers,
+        question: questionText,
+        category: category,
+        subject: subject, // Save the roman numeral
+        answers: answers,
       level: this.determineDifficultyLevel(questionText, answers),
       total_attempts: 0
     };
@@ -273,8 +273,8 @@ class FinalQuestionParser {
   }
 }
 
-  async function main() {
-    // Use the existing extracted text file
+async function main() {
+  // Use the existing extracted text file
     const inputPath = join(__dirname, 'data', 'extracted-text_joined.txt');
     const outputPath = join(__dirname, 'data', 'parsed-questions.json');
   

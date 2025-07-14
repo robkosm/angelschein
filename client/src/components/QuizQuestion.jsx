@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function QuizQuestion({ question, onSubmit, onNext }) {
+function QuizQuestion({ question, questionCount, onSubmit, onNext }) {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [result, setResult] = useState(null);
@@ -65,13 +65,18 @@ function QuizQuestion({ question, onSubmit, onNext }) {
   const questionData = question.question;
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 h-[600px] flex flex-col">
+    <div className="bg-white rounded-lg shadow-sm p-6 h-[600px] flex flex-col w-full max-w-2xl mx-auto">
       <div className="flex-1 flex flex-col">
         <div className="mb-6">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
-              {questionData.category}
-            </span>
+            <div className="flex items-center space-x-2">
+              <div className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-sm font-medium">
+                #{questionCount}
+              </div>
+              <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                {questionData.category}
+              </span>
+            </div>
             <div className="flex items-center space-x-2 text-sm text-gray-500">
               <span>Level {questionData.level}</span>
               <span>•</span>
@@ -79,7 +84,7 @@ function QuizQuestion({ question, onSubmit, onNext }) {
             </div>
           </div>
 
-          <h2 className="text-xl font-semibold text-gray-800 mb-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-6 mt-4">
             {questionData.question}
           </h2>
         </div>

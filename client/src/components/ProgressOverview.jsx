@@ -35,9 +35,7 @@ function ProgressOverview({ progress, questions, stats, onClose }) {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-gray-800">
-          Fortschrittsübersicht
-        </h2>
+        <h2 className="text-2xl font-bold text-gray-800">Fortschritt</h2>
         <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
           ✕
         </button>
@@ -116,7 +114,7 @@ function ProgressOverview({ progress, questions, stats, onClose }) {
       {/* Progress Table */}
       <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
         <div className="px-6 py-4 border-b bg-gray-50">
-          <h3 className="font-semibold text-gray-800">Fragenfortschritt</h3>
+          <h3 className="font-semibold text-gray-800">Fragen</h3>
         </div>
         <div className="overflow-x-auto px-3">
           <table className="w-full">

@@ -1,4 +1,4 @@
-function Header({ questionCount, stats, onToggleProgress, showProgress }) {
+function Header({ onToggleProgress, showProgress }) {
   return (
     <header className="bg-white shadow-sm border-b">
       <div className="max-w-4xl mx-auto px-4 py-4">
@@ -11,18 +11,6 @@ function Header({ questionCount, stats, onToggleProgress, showProgress }) {
           </div>
 
           <div className="flex items-center space-x-4">
-            {stats && (
-              <div className="hidden md:flex items-center space-x-4 text-sm text-gray-600">
-                <span>Fragen: {stats.totalQuestions}</span>
-                <span>Ø Level: {stats.averageLevel}</span>
-                <span>Versuche: {stats.totalAttempts}</span>
-              </div>
-            )}
-
-            <div className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-sm font-medium">
-              #{questionCount}
-            </div>
-
             <button
               onClick={onToggleProgress}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${

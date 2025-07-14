@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import QuizQuestion from "./components/QuizQuestion";
 import ProgressOverview from "./components/ProgressOverview";
 import Header from "./components/Header";
@@ -17,9 +17,9 @@ function App() {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [loadData]);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const [questionsRes, progressRes, statsRes] = await Promise.all([
@@ -43,26 +43,29 @@ function App() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_URL, USER_ID, loadNextQuestion]);
 
-  const loadNextQuestion = async (excludeId = null) => {
-    try {
-      const url = excludeId
-        ? `${API_URL}/api/quiz/next/${USER_ID}?exclude=${excludeId}`
-        : `${API_URL}/api/quiz/next/${USER_ID}`;
+  const loadNextQuestion = useCallback(
+    async (excludeId = null) => {
+      try {
+        const url = excludeId
+          ? `${API_URL}/api/quiz/next/${USER_ID}?exclude=${excludeId}`
+          : `${API_URL}/api/quiz/next/${USER_ID}`;
 
-      const response = await fetch(url);
-      if (response.ok) {
-        const question = await response.json();
-        setCurrentQuestion(question);
-        setQuestionCount((prev) => prev + 1);
-      } else {
-        console.error("No questions available");
+        const response = await fetch(url);
+        if (response.ok) {
+          const question = await response.json();
+          setCurrentQuestion(question);
+          setQuestionCount((prev) => prev + 1);
+        } else {
+          console.error("No questions available");
+        }
+      } catch (error) {
+        console.error("Error loading next question:", error);
       }
-    } catch (error) {
-      console.error("Error loading next question:", error);
-    }
-  };
+    },
+    [API_URL, USER_ID]
+  );
 
   const handleAnswerSubmit = async (questionId, selectedAnswerId) => {
     try {
@@ -118,8 +121,6 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header
-        questionCount={questionCount}
-        stats={stats}
         onToggleProgress={() => setShowProgress(!showProgress)}
         showProgress={showProgress}
       />
@@ -137,6 +138,7 @@ function App() {
             {currentQuestion ? (
               <QuizQuestion
                 question={currentQuestion}
+                questionCount={questionCount}
                 onSubmit={handleAnswerSubmit}
                 onNext={handleNextQuestion}
               />

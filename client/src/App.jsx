@@ -15,9 +15,27 @@ function App() {
   const API_URL = "http://localhost:3001";
   const USER_ID = "default"; // In a real app, this would come from authentication
 
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
+  const loadNextQuestion = useCallback(
+    async (excludeId = null) => {
+      try {
+        const url = excludeId
+          ? `${API_URL}/api/quiz/next/${USER_ID}?exclude=${excludeId}`
+          : `${API_URL}/api/quiz/next/${USER_ID}`;
+
+        const response = await fetch(url);
+        if (response.ok) {
+          const question = await response.json();
+          setCurrentQuestion(question);
+          setQuestionCount((prev) => prev + 1);
+        } else {
+          console.error("No questions available");
+        }
+      } catch (error) {
+        console.error("Error loading next question:", error);
+      }
+    },
+    [API_URL, USER_ID]
+  );
 
   const loadData = useCallback(async () => {
     try {
@@ -45,27 +63,9 @@ function App() {
     }
   }, [API_URL, USER_ID, loadNextQuestion]);
 
-  const loadNextQuestion = useCallback(
-    async (excludeId = null) => {
-      try {
-        const url = excludeId
-          ? `${API_URL}/api/quiz/next/${USER_ID}?exclude=${excludeId}`
-          : `${API_URL}/api/quiz/next/${USER_ID}`;
-
-        const response = await fetch(url);
-        if (response.ok) {
-          const question = await response.json();
-          setCurrentQuestion(question);
-          setQuestionCount((prev) => prev + 1);
-        } else {
-          console.error("No questions available");
-        }
-      } catch (error) {
-        console.error("Error loading next question:", error);
-      }
-    },
-    [API_URL, USER_ID]
-  );
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const handleAnswerSubmit = async (questionId, selectedAnswerId) => {
     try {

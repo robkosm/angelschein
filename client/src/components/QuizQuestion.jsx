@@ -68,74 +68,76 @@ function QuizQuestion({ question, onSubmit, onNext }) {
   const questionData = question.question;
 
   return (
-    <div className="bg-white rounded-xl shadow-xl shadow-gray-200/50 p-6 h-[600px] flex flex-col w-full max-w-2xl mx-auto">
-      <div className="flex-1 flex flex-col">
-        <div className="mb-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="bg-white text-gray-700 px-2 rounded-full text-sm font-medium">
-                #{questionData.id}
-              </div>
-              <div className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium">
-                {questionData.category}
-              </div>
-            </div>
-            <div className="flex items-center space-x-2 text-sm text-gray-500">
-              <span>Level {questionData.level}</span>
-              <span>•</span>
-              <span>{question.total_attempts} Versuche</span>
-            </div>
+    <div className="bg-white rounded-xl shadow-xl shadow-gray-200/50 p-6 h-[85vh] sm:h-[600px] flex flex-col w-full max-w-2xl mx-auto">
+      <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 mb-6">
+        <div className="flex items-center space-x-2">
+          <div className="bg-white text-gray-700 px-2 rounded-full text-sm font-medium">
+            #{questionData.id}
           </div>
-
-          <h2 className="text-xl font-semibold text-gray-800 mb-6 mt-4">
-            {questionData.question}
-          </h2>
+          <div className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium">
+            {questionData.category}
+          </div>
         </div>
-
-        <div className="space-y-3 flex-1">
-          {questionData.answers.map((answer) => (
-            <button
-              key={answer.id}
-              onClick={() => handleAnswerSelect(answer.id)}
-              disabled={submitted}
-              className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-300 ${getAnswerClass(
-                answer.id
-              )} ${!submitted ? "hover:shadow-lg" : ""}`}
-            >
-              <div className="flex items-start">
-                <div
-                  className={`w-6 h-6 rounded-full border-2 mr-3 flex items-center justify-center transition-all duration-300 flex-shrink-0 ${
-                    selectedAnswer === answer.id && !submitted
-                      ? "border-teal-600 bg-teal-600"
-                      : submitted &&
-                        selectedAnswer === answer.id &&
-                        answer.id !== result?.correctAnswer?.id
-                      ? "border-red-400 bg-red-400"
-                      : submitted && answer.id === result?.correctAnswer?.id
-                      ? "border-emerald-500 bg-emerald-500"
-                      : "border-gray-300"
-                  }`}
-                >
-                  {selectedAnswer === answer.id && !submitted && (
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
-                  )}
-                  {submitted && answer.id === result?.correctAnswer?.id && (
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
-                  )}
-                  {submitted &&
-                    selectedAnswer === answer.id &&
-                    answer.id !== result?.correctAnswer?.id && (
-                      <div className="text-white text-sm font-bold">✗</div>
-                    )}
-                </div>
-                <span className="font-medium text-gray-700">{answer.text}</span>
-              </div>
-            </button>
-          ))}
+        <div className="flex items-center space-x-2 text-sm text-gray-500">
+          <span>Level {questionData.level}</span>
+          <span>•</span>
+          <span>{question.total_attempts} Versuche</span>
         </div>
       </div>
 
-      <div className="flex justify-end">
+      <h2 className="text-xl font-semibold text-gray-800 mb-6">
+        {questionData.question}
+      </h2>
+
+      <div className="flex-1 min-h-0 overflow-hidden">
+        <div className="h-full overflow-y-auto">
+          <div className="space-y-3 pb-2">
+            {questionData.answers.map((answer) => (
+              <button
+                key={answer.id}
+                onClick={() => handleAnswerSelect(answer.id)}
+                disabled={submitted}
+                className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-300 ${getAnswerClass(
+                  answer.id
+                )} ${!submitted ? "hover:shadow-lg" : ""}`}
+              >
+                <div className="flex items-start">
+                  <div
+                    className={`w-6 h-6 rounded-full border-2 mr-3 flex items-center justify-center transition-all duration-300 flex-shrink-0 ${
+                      selectedAnswer === answer.id && !submitted
+                        ? "border-teal-600 bg-teal-600"
+                        : submitted &&
+                          selectedAnswer === answer.id &&
+                          answer.id !== result?.correctAnswer?.id
+                        ? "border-red-400 bg-red-400"
+                        : submitted && answer.id === result?.correctAnswer?.id
+                        ? "border-emerald-500 bg-emerald-500"
+                        : "border-gray-300"
+                    }`}
+                  >
+                    {selectedAnswer === answer.id && !submitted && (
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                    )}
+                    {submitted && answer.id === result?.correctAnswer?.id && (
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                    )}
+                    {submitted &&
+                      selectedAnswer === answer.id &&
+                      answer.id !== result?.correctAnswer?.id && (
+                        <div className="text-white text-sm font-bold">✗</div>
+                      )}
+                  </div>
+                  <span className="font-medium text-gray-700">
+                    {answer.text}
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex justify-end mt-6">
         {!submitted ? (
           <button
             onClick={handleSubmit}

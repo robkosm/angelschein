@@ -147,7 +147,7 @@ function ProgressOverview({ progress, questions, stats, onClose }) {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {progress.map((item, index) => {
+              {progress.map((item) => {
                 const question = questions.find(
                   (q) => q.id === item.question_id
                 );
@@ -156,7 +156,7 @@ function ProgressOverview({ progress, questions, stats, onClose }) {
                 return (
                   <tr key={item.question_id} className="hover:bg-gray-50">
                     <td className="px-2 py-4 whitespace-nowrap text-sm text-gray-500 w-12 text-center">
-                      {index + 1}
+                      #{question.id}
                     </td>
                     <td className="px-3 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900 max-w-xs truncate">

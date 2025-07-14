@@ -1,4 +1,4 @@
-# Angelschein - Fishing License Quiz App
+# PetriPass - Fishing License Quiz App
 
 A web application to help users prepare for their fishing license exam (Angelschein) in Brandenburg Germany.
 

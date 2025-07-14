@@ -119,84 +119,54 @@ function ProgressOverview({ progress, questions, stats, onClose }) {
         <div className="mb-4">
           <h3 className="font-semibold text-gray-800">Fragen</h3>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr>
-                <th className="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
-                  Nr.
-                </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Frage
-                </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Kategorie
-                </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Level
-                </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Erfolgsrate
-                </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Zuletzt gelernt
-                </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Versuche
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {progress.map((item) => {
-                const question = questions.find(
-                  (q) => q.id === item.question_id
-                );
-                if (!question) return null;
+        <div className="space-y-4">
+          {progress.map((item) => {
+            const question = questions.find((q) => q.id === item.question_id);
+            if (!question) return null;
 
-                return (
-                  <tr key={item.question_id} className="hover:bg-gray-50">
-                    <td className="px-2 py-4 whitespace-nowrap text-sm text-gray-500 w-12 text-center">
+            return (
+              <div
+                key={item.question_id}
+                className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50"
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm font-medium text-gray-500">
                       #{question.id}
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900 max-w-xs truncate">
-                        {question.question}
-                      </div>
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap">
-                      <span className="text-sm text-gray-500">
-                        {question.category}
-                      </span>
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap">
-                      <span
-                        className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getLevelColor(
-                          item.level
-                        )}`}
-                      >
-                        {item.level}
-                      </span>
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap">
-                      <span
-                        className={`text-sm font-medium ${getSuccessRateColor(
-                          item.success_rate
-                        )}`}
-                      >
-                        {Math.round(item.success_rate * 100)}%
-                      </span>
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {formatDate(item.last_reviewed)}
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {item.total_attempts}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                    </span>
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getLevelColor(
+                        item.level
+                      )}`}
+                    >
+                      Level {item.level}
+                    </span>
+                  </div>
+                  <span
+                    className={`text-sm font-medium ${getSuccessRateColor(
+                      item.success_rate
+                    )}`}
+                  >
+                    {Math.round(item.success_rate * 100)}%
+                  </span>
+                </div>
+
+                <div className="text-sm font-medium text-gray-900 mb-2 line-clamp-2">
+                  {question.question}
+                </div>
+
+                <div className="space-y-2 text-sm text-gray-500">
+                  <div className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs font-medium inline-block">
+                    {question.category}
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>{item.total_attempts} Versuche</span>
+                    <span>{formatDate(item.last_reviewed)}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 

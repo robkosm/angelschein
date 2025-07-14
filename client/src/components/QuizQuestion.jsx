@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 function QuizQuestion({ question, onSubmit, onNext }) {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  // Shuffle answers when question changes
+  const shuffledAnswers = useMemo(() => {
+    if (!question?.question?.answers) return [];
+    return [...question.question.answers].sort(() => Math.random() - 0.5);
+  }, [question?.question?.id]);
 
   const handleAnswerSelect = (answerId) => {
     if (!submitted) {
@@ -92,7 +98,7 @@ function QuizQuestion({ question, onSubmit, onNext }) {
       <div className="flex-1 min-h-0 overflow-hidden">
         <div className="h-full overflow-y-auto">
           <div className="space-y-3 pb-2">
-            {questionData.answers.map((answer) => (
+            {shuffledAnswers.map((answer) => (
               <button
                 key={answer.id}
                 onClick={() => handleAnswerSelect(answer.id)}

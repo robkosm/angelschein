@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function QuizQuestion({ question, questionCount, onSubmit, onNext }) {
+function QuizQuestion({ question, onSubmit, onNext }) {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [result, setResult] = useState(null);
@@ -19,7 +19,10 @@ function QuizQuestion({ question, questionCount, onSubmit, onNext }) {
     try {
       const result = await onSubmit(question.question_id, selectedAnswer);
       setResult(result);
-      setSubmitted(true);
+      // Add a small delay to allow the click animation to complete
+      setTimeout(() => {
+        setSubmitted(true);
+      }, 150);
     } catch (error) {
       console.error("Error submitting answer:", error);
     } finally {
@@ -37,17 +40,17 @@ function QuizQuestion({ question, questionCount, onSubmit, onNext }) {
   const getAnswerClass = (answerId) => {
     if (!submitted) {
       return selectedAnswer === answerId
-        ? "border-emerald-400 bg-emerald-50"
-        : "border-gray-200 hover:border-gray-300";
+        ? "border-teal-600 bg-teal-50 shadow-md"
+        : "border-gray-200 hover:border-gray-300 hover:shadow-md";
     }
 
     const isSelected = selectedAnswer === answerId;
     const isCorrect = answerId === result?.correctAnswer?.id;
 
     if (isCorrect) {
-      return "border-green-500 bg-green-50";
+      return "border-emerald-500 bg-emerald-50 shadow-md";
     } else if (isSelected && !isCorrect) {
-      return "border-red-500 bg-red-50";
+      return "border-red-400 bg-red-50 shadow-md";
     } else {
       return "border-gray-200 opacity-60";
     }
@@ -55,7 +58,7 @@ function QuizQuestion({ question, questionCount, onSubmit, onNext }) {
 
   if (!question?.question) {
     return (
-      <div className="bg-white rounded-lg shadow-sm p-6">
+      <div className="bg-white rounded-xl shadow-lg shadow-gray-200/50 p-6">
         <p className="text-gray-500">Keine Frage verfügbar</p>
       </div>
     );
@@ -65,17 +68,17 @@ function QuizQuestion({ question, questionCount, onSubmit, onNext }) {
   const questionData = question.question;
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 h-[600px] flex flex-col w-full max-w-2xl mx-auto">
+    <div className="bg-white rounded-xl shadow-xl shadow-gray-200/50 p-6 h-[600px] flex flex-col w-full max-w-2xl mx-auto">
       <div className="flex-1 flex flex-col">
         <div className="mb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-sm font-medium">
-                #{questionCount}
+              <div className="bg-white text-gray-700 px-2 rounded-full text-sm font-medium">
+                #{questionData.id}
               </div>
-              <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
+              <div className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium">
                 {questionData.category}
-              </span>
+              </div>
             </div>
             <div className="flex items-center space-x-2 text-sm text-gray-500">
               <span>Level {questionData.level}</span>
@@ -95,21 +98,35 @@ function QuizQuestion({ question, questionCount, onSubmit, onNext }) {
               key={answer.id}
               onClick={() => handleAnswerSelect(answer.id)}
               disabled={submitted}
-              className={`w-full text-left p-4 rounded-lg border-2 transition-all ${getAnswerClass(
+              className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-300 ${getAnswerClass(
                 answer.id
-              )} ${!submitted ? "hover:shadow-sm" : ""}`}
+              )} ${!submitted ? "hover:shadow-lg" : ""}`}
             >
-              <div className="flex items-center">
+              <div className="flex items-start">
                 <div
-                  className={`w-6 h-6 rounded-full border-2 mr-3 flex items-center justify-center ${
-                    selectedAnswer === answer.id
-                      ? "border-emerald-400 bg-emerald-400"
+                  className={`w-6 h-6 rounded-full border-2 mr-3 flex items-center justify-center transition-all duration-300 flex-shrink-0 ${
+                    selectedAnswer === answer.id && !submitted
+                      ? "border-teal-600 bg-teal-600"
+                      : submitted &&
+                        selectedAnswer === answer.id &&
+                        answer.id !== result?.correctAnswer?.id
+                      ? "border-red-400 bg-red-400"
+                      : submitted && answer.id === result?.correctAnswer?.id
+                      ? "border-emerald-500 bg-emerald-500"
                       : "border-gray-300"
                   }`}
                 >
-                  {selectedAnswer === answer.id && (
+                  {selectedAnswer === answer.id && !submitted && (
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                   )}
+                  {submitted && answer.id === result?.correctAnswer?.id && (
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                  )}
+                  {submitted &&
+                    selectedAnswer === answer.id &&
+                    answer.id !== result?.correctAnswer?.id && (
+                      <div className="text-white text-sm font-bold">✗</div>
+                    )}
                 </div>
                 <span className="font-medium text-gray-700">{answer.text}</span>
               </div>
@@ -123,14 +140,14 @@ function QuizQuestion({ question, questionCount, onSubmit, onNext }) {
           <button
             onClick={handleSubmit}
             disabled={!selectedAnswer || loading}
-            className="bg-emerald-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="bg-teal-700 text-white px-8 py-2 rounded-xl font-medium hover:bg-teal-600 disabled:bg-gray-300 disabled:hover:bg-gray-300 disabled:cursor-not-allowed transition-all duration-200 w-[200px]"
           >
-            {loading ? "Wird gesendet..." : "Antwort senden"}
+            Antwort senden
           </button>
         ) : (
           <button
             onClick={handleNext}
-            className="bg-gray-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-700 transition-colors"
+            className="bg-teal-700 text-white px-8 py-2 rounded-xl font-medium hover:bg-teal-600 transition-all duration-200 w-[200px]"
           >
             Nächste Frage
           </button>

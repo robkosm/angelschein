@@ -2,18 +2,18 @@ function ProgressOverview({ progress, questions, stats, onClose }) {
   const getLevelColor = (level) => {
     const colors = [
       "bg-slate-100 text-slate-800", // Level 0 - New
-      "bg-blue-100 text-blue-800", // Level 1
-      "bg-emerald-100 text-emerald-800", // Level 2
-      "bg-amber-100 text-amber-800", // Level 3
-      "bg-orange-100 text-orange-800", // Level 4
-      "bg-rose-100 text-rose-800", // Level 5
-      "bg-violet-100 text-violet-800", // Level 6+ - Mastered
+      "bg-teal-200 text-teal-900", // Level 1
+      "bg-teal-300 text-teal-900", // Level 2
+      "bg-teal-400 text-white", // Level 3
+      "bg-teal-500 text-white", // Level 4
+      "bg-teal-600 text-white", // Level 5
+      "bg-teal-700 text-white", // Level 6+ - Mastered
     ];
     return colors[Math.min(level, colors.length - 1)];
   };
 
   const getProgressBarColor = () => {
-    return "bg-emerald-500"; // All levels use the same emerald color
+    return "bg-teal-600"; // All levels use the same teal color
   };
 
   const getLevelWeight = (level) => {
@@ -27,16 +27,19 @@ function ProgressOverview({ progress, questions, stats, onClose }) {
   };
 
   const getSuccessRateColor = (rate) => {
-    if (rate >= 0.8) return "text-green-600";
-    if (rate >= 0.6) return "text-yellow-600";
-    return "text-red-600";
+    if (rate >= 0.8) return "text-emerald-600";
+    if (rate >= 0.6) return "text-amber-600";
+    return "text-red-500";
   };
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-800">Fortschritt</h2>
-        <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+        <button
+          onClick={onClose}
+          className="text-gray-500 hover:text-gray-700 p-1 rounded-lg transition-all duration-200 border border-transparent hover:border-gray-200"
+        >
           ✕
         </button>
       </div>
@@ -44,26 +47,26 @@ function ProgressOverview({ progress, questions, stats, onClose }) {
       {/* Overall Stats */}
       {stats && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-white p-4 rounded-lg shadow-sm border">
+          <div className="bg-white p-4 rounded-xl shadow-lg shadow-gray-200/50">
             <div className="text-2xl font-bold text-gray-800">
               {stats.totalQuestions}
             </div>
             <div className="text-sm text-gray-600">Fragen gesamt</div>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border">
-            <div className="text-2xl font-bold text-blue-600">
+          <div className="bg-white p-4 rounded-xl shadow-lg shadow-gray-200/50">
+            <div className="text-2xl font-bold text-teal-700">
               {stats.averageLevel}
             </div>
             <div className="text-sm text-gray-600">Ø Level</div>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border">
-            <div className="text-2xl font-bold text-green-600">
+          <div className="bg-white p-4 rounded-xl shadow-lg shadow-gray-200/50">
+            <div className="text-2xl font-bold text-teal-700">
               {stats.totalAttempts}
             </div>
             <div className="text-sm text-gray-600">Versuche gesamt</div>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border">
-            <div className="text-2xl font-bold text-purple-600">
+          <div className="bg-white p-4 rounded-xl shadow-lg shadow-gray-200/50">
+            <div className="text-2xl font-bold text-teal-700">
               {stats.totalQuestions > 0
                 ? Math.round(
                     (stats.totalAttempts / stats.totalQuestions) * 100
@@ -77,7 +80,7 @@ function ProgressOverview({ progress, questions, stats, onClose }) {
 
       {/* Level Distribution Chart */}
       {stats && (
-        <div className="bg-white rounded-lg shadow-sm border p-6">
+        <div className="bg-white rounded-xl shadow-lg shadow-gray-200/50 p-6">
           <h3 className="font-semibold text-gray-800 mb-4">
             Fragen nach Level
           </h3>
@@ -112,13 +115,13 @@ function ProgressOverview({ progress, questions, stats, onClose }) {
       )}
 
       {/* Progress Table */}
-      <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
-        <div className="px-6 py-4 border-b bg-gray-50">
+      <div className="bg-white rounded-xl shadow-lg shadow-gray-200/50 p-6">
+        <div className="mb-4">
           <h3 className="font-semibold text-gray-800">Fragen</h3>
         </div>
-        <div className="overflow-x-auto px-3">
+        <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead>
               <tr>
                 <th className="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
                   Nr.
@@ -198,7 +201,7 @@ function ProgressOverview({ progress, questions, stats, onClose }) {
       </div>
 
       {/* SRS Level Guide */}
-      <div className="bg-white rounded-lg shadow-sm border p-6">
+      <div className="bg-white rounded-xl shadow-lg shadow-gray-200/50 p-6">
         <h3 className="font-semibold text-gray-800 mb-4">SRS-Level-System</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>

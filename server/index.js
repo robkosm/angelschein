@@ -30,7 +30,7 @@ function calculateSuccessRate(consecutiveCorrect, totalAttempts) {
 }
 
 function getOrCreateProgress(userId, questionId) {
-    let progress = db.data.user_progress.find(p => p.user_id === userId && p.question_id === questionId);
+    let progress = db.data.user_progress.find(p => p.user_id === userId && p.question_id === parseInt(questionId));
     
     if (!progress) {
         progress = {
@@ -56,7 +56,7 @@ function selectRandomQuestion(userId, excludeQuestionId = null) {
     const selectionPool = [];
     
     userProgress.forEach(progress => {
-        if (excludeQuestionId && progress.question_id === excludeQuestionId) return;
+        if (excludeQuestionId && progress.question_id === parseInt(excludeQuestionId)) return;
         
         const weight = LEVEL_WEIGHTS[Math.min(progress.level, LEVEL_WEIGHTS.length - 1)];
         const question = db.data.questions.find(q => q.id === progress.question_id);
@@ -75,7 +75,7 @@ function selectRandomQuestion(userId, excludeQuestionId = null) {
     
     // Add new questions (level 0) with high weight
     const newQuestions = db.data.questions.filter(q => 
-        !userProgress.some(p => p.question_id === q.id)
+        !userProgress.some(p => p.question_id === parseInt(q.id))
     );
     
     newQuestions.forEach(question => {
@@ -133,7 +133,7 @@ app.get('/api/quiz/progress/:userId', (req, res) => {
     const progress = db.data.user_progress
         .filter(p => p.user_id === userId)
         .map(p => {
-            const question = db.data.questions.find(q => q.id === p.question_id);
+            const question = db.data.questions.find(q => q.id === parseInt(p.question_id));
             return {
                 ...p,
                 question: question,
@@ -155,7 +155,7 @@ app.get('/api/quiz/stats/:userId', (req, res) => {
     
     // Add unanswered questions to level 0
     const answeredQuestionIds = progress.map(p => p.question_id);
-    const unansweredQuestions = db.data.questions.filter(q => !answeredQuestionIds.includes(q.id));
+    const unansweredQuestions = db.data.questions.filter(q => !answeredQuestionIds.includes(parseInt(q.id)));
     levelStats[0] += unansweredQuestions.length;
     
     // Calculate overall stats
@@ -186,7 +186,7 @@ app.post('/api/questions', async (req, res) => {
 
 app.post('/api/quiz/submit', async (req, res) => {
     const { userId, questionId, selectedAnswerId } = req.body;
-    const question = db.data.questions.find(q => q.id === questionId);
+    const question = db.data.questions.find(q => q.id === parseInt(questionId));
     
     if (!question) {
         return res.status(404).json({ error: 'Question not found' });

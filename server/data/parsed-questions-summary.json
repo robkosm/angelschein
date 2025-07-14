@@ -1,0 +1,23 @@
+{
+  "total_questions": 600,
+  "categories": {
+    "Fischkunde und -hege": 120,
+    "Pflege der Fischgewässer": 120,
+    "Fanggeräte und deren Gebrauch": 120,
+    "Behandlung der gefangenen Fische": 120,
+    "Einschlägige Rechtsvorschriften": 120
+  },
+  "subjects": {
+    "I": 120,
+    "II": 120,
+    "III": 120,
+    "IV": 120,
+    "V": 120
+  },
+  "difficulty_levels": {
+    "1": 91,
+    "2": 338,
+    "3": 171
+  },
+  "generated_at": "2025-07-13T22:04:15.441Z"
+}

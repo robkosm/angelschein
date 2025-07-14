@@ -61,28 +61,31 @@ function QuizQuestion({ question, onSubmit, onNext }) {
     );
   }
 
+  // Extract the actual question data from the progress object
+  const questionData = question.question;
+
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 h-[600px] flex flex-col">
       <div className="flex-1 flex flex-col">
         <div className="mb-6">
           <div className="flex items-center justify-between">
             <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
-              {question.question.category}
+              {questionData.category}
             </span>
             <div className="flex items-center space-x-2 text-sm text-gray-500">
-              <span>Level {question.level}</span>
+              <span>Level {questionData.level}</span>
               <span>•</span>
               <span>{question.total_attempts} Versuche</span>
             </div>
           </div>
 
           <h2 className="text-xl font-semibold text-gray-800 mb-6">
-            {question.question.question}
+            {questionData.question}
           </h2>
         </div>
 
         <div className="space-y-3 flex-1">
-          {question.question.answers.map((answer) => (
+          {questionData.answers.map((answer) => (
             <button
               key={answer.id}
               onClick={() => handleAnswerSelect(answer.id)}
